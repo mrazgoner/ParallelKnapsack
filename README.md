@@ -1,2 +1,0 @@
-# ParallelKnapsack
-Parallel Knapsack
