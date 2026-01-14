@@ -4,8 +4,8 @@
 #include "stdafx.h"
 #include <iostream>
 #include <math.h>
-#include <fstream >
-#include "knapsack_kernel.h"
+#include <fstream>
+#include "ParallelKnapsackCalculator.h"
 
 using namespace std;
 
@@ -14,29 +14,29 @@ class ParallelKnapsack
 {
 public:
 
-	ParallelKnapsack(int* _weight, double* _gain, int _items, int _capacity)
+	ParallelKnapsack(int* _weight, double* _profit, int _items, int _capacity)
 	{
 		items = _items;
 		weight = _weight;
-		gain = _gain;
+		profit = _profit;
 		capacity = _capacity;
 
-		n = items + 1;
+		n = items;
 		w = capacity;
 		resultVector = new bool[items];
 
-		initMatrix();
 	}
+
 
 	void compute()
 	{
-		knapsack_kernel(gainMatrix, weight, gain, isIncluded, w, n);
-		calculateVector();
+		ParallelKnapsackCalculator::fill_profit_matrix(profitMatrix, weight, profit, resultVector, w, n);
 	}
 
 	//accessors 
 	bool* getVector(){ return resultVector; }
 	double getMaxGain(){ return maxGain; }
+	double* getProfitMatrix(){ return profitMatrix; }
 
 private:
 
@@ -48,55 +48,15 @@ private:
 
 	// input vectors 
 	int* weight;
-	double* gain;
+	double* profit;
 
 	// matrix 
-	double* gainMatrix;
+	double* profitMatrix;
 	bool* isIncluded;
 
 	// results
 	double maxGain;
 	bool* resultVector;
-
-	// define matrix of reduced problems
-	void initMatrix()
-	{
-		gainMatrix = new double[n*w];
-		isIncluded = new bool[n*w];
-
-		for (int i = 0; i < n; i++)
-		{
-			double _gain = 0;
-			for (int j = 0; j < w; j++)
-			{
-				gainMatrix[i*w + j] = 0;
-				isIncluded[i*w + j] = false;
-
-			}// for j
-		}// for i 
-
-	}// initMatrix()
-
-
-	void calculateVector()
-	{
-		int i = n - 1;
-		int j = w - 1;
-
-		maxGain = gainMatrix[i*w + j];
-
-		while (i > 0)
-		{
-			resultVector[i - 1] = isIncluded[i*w + j];
-			if (isIncluded[i*w + j])
-			{
-				j -= weight[i - 1];
-			}
-
-			i--;
-		}
-	}// calculate vector
-
 };
 
 
@@ -104,38 +64,49 @@ private:
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-	int* weight = new int[20];
-	double* gain = new double[20];
+	int* weight = new int[8] { 10, 4, 7, 4, 6, 8, 5, 2 };
+	double* gain = new double[8] {5.0, 7.0, 12.0, 4.0, 5.0, 7.0, 9.0, 2.0};
 
-	for (int i = 0; i < 20; i++)
-	{
-		weight[i] = 2 + i + i % 3 - i % 2 + i % 7;
-		gain[i] = 3 + i % 5 + i % 7 - i % 3 + 0.1*(i % 5) + 0.01*(i % 13);
-	}
-
-	ParallelKnapsack knap(weight, gain, 20, 45);
+	ParallelKnapsack knap(weight, gain, 8, 10);
 
 	ofstream outputFile;
-	outputFile.open("output.txt");
+	outputFile.open("output.tsv");
 
 	outputFile << "items:";
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 8; i++)
 		outputFile << '\t' << "#" << i;
 	outputFile << endl << "weights:";
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 8; i++)
 		outputFile << '\t' << weight[i];
 	outputFile << endl << "value:";
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 8; i++)
 		outputFile << '\t' << gain[i];
-	outputFile << endl;
+	outputFile << endl << endl;
 
 	knap.compute();
+
+	outputFile << "Calculation Matrix:" << endl;
+
+	double* gainMatrix = knap.getProfitMatrix();
+	for (int i = 0; i <= 8; i++)
+	{
+		outputFile << '\t';
+		for (int j = 0; j <= 10; j++) 
+		{
+			outputFile << gainMatrix[i * 11 + j] << '\t';
+		}
+		outputFile << endl;
+	}
+
+	outputFile << endl;
+
+	outputFile << endl << endl;
 
 	outputFile << "optimal set:" << knap.getMaxGain() << endl;
 
 	outputFile << endl << "item:";
-	for (int i = 0; i < 20; i++)
-		outputFile << '\t' << knap.getVector()[i] ? "Yes" : "No";
+	for (int i = 0; i < 8; i++)
+		outputFile << '\t' << (knap.getVector()[i] ? "Yes" : "No");
 	outputFile << endl;
 
 	system("pause");
