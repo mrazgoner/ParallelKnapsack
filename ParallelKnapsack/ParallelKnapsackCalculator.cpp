@@ -1,74 +1,24 @@
 #include "ParallelKnapsackCalculator.h"
 
-void ParallelKnapsackCalculator::fill_profit_matrix(double*& profitMatrix, int*& weight, double*& profit, bool*& resultVector, int maxCapacity, int n)
+
+void ParallelKnapsackCalculator::traverse(const std::function<void(int, int)>& worker)
 {
-	initMatrix(profitMatrix, maxCapacity, n);
+	int anti_diagonals = m_rows + m_cols;
 
-	for (int item = 1; item <= n; item++)
+	#pragma omp parallel
 	{
-		for (int capacity = 1; capacity <= maxCapacity; capacity++)
+		for (int d = 2; d < anti_diagonals; ++d)
 		{
-			fill_profit_matrix_kernel(profitMatrix, weight, profit, maxCapacity, n, item, capacity);
-		}
-	}
+			int start_row = std::max(1, d - m_cols + 1);
+			int end_row = std::min(m_rows - 1, d - 1);
+			if (start_row > end_row) continue;
 
-	calculate_result_vector(profitMatrix, weight, resultVector, maxCapacity, n);
-}
-
-
-void ParallelKnapsackCalculator::fill_profit_matrix_kernel(double*& profitMatrix, int*& weight, double*& profit, int maxCapacity, int n, int item, int capacity)
-{
-	int add_weight = weight[item - 1];
-	if (add_weight > capacity)
-	{
-		profitMatrix[(maxCapacity + 1) * item + capacity] = profitMatrix[(maxCapacity + 1) * (item - 1) + capacity];
-	}
-	else
-	{
-		double prev_item_profit = profitMatrix[(maxCapacity + 1) * (item - 1) + capacity];
-		double add_profit = profitMatrix[(maxCapacity + 1) * (item - 1) + capacity - weight[item - 1]] + profit[item - 1];
-
-		if (prev_item_profit > add_profit)
-		{
-			profitMatrix[(maxCapacity + 1) * item + capacity] = prev_item_profit;
-		}
-		else
-		{
-			profitMatrix[(maxCapacity + 1) * item + capacity] = add_profit;
-		}
-	}
-}
-
-void ParallelKnapsackCalculator::calculate_result_vector(double*& profitMatrix, int*& weight, bool*& resultVector, int maxCapacity, int n)
-{
-	int i = n;
-	int j = maxCapacity;
-	double maxValue = profitMatrix[(maxCapacity + 1) * i + j];
-
-	for (int i = 0; i < n; i++)
-	{
-		resultVector[i] = false;
-	}
-
-	for (; i > 0; i--)
-	{
-		if (profitMatrix[(maxCapacity + 1) * i + j] != profitMatrix[(maxCapacity + 1) * (i - 1) + j])
-		{
-			resultVector[i - 1] = true;
-			j -= weight[i - 1];
-		}
-	}
-}
-
-void ParallelKnapsackCalculator::initMatrix(double*& profitMatrix, int maxCapacity, int n)
-{
-	profitMatrix = new double[(n + 1) * (maxCapacity + 1)];
-
-	for (int i = 0; i <= n; i++)
-	{
-		for (int j = 0; j <= maxCapacity; j++)
-		{
-			profitMatrix[i * maxCapacity + j] = 0;
+			#pragma omp for schedule(static)
+			for (int i = start_row; i <= end_row; ++i)
+			{
+				int j = d - i;
+				worker(i, j);
+			}
 		}
 	}
 }

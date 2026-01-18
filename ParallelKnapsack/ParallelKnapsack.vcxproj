@@ -81,13 +81,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DynamicKnapsackCalculator.h" />
     <ClInclude Include="ParallelKnapsackCalculator.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ParallelKnapsackCalculator.cpp" />
+    <ClCompile Include="DynamicKnapsackCalculator.cpp" />
     <ClCompile Include="ParallelKnapsack.cpp" />
+    <ClCompile Include="ParallelKnapsackCalculator.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
