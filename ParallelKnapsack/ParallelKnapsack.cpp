@@ -45,6 +45,12 @@ static void write_output_tsv(const DynamicKnapsackCalculator& calc,
     const size_t rows = static_cast<size_t>(calc.rows());
     const size_t cols = static_cast<size_t>(calc.cols());
 
+    // Defensive: avoid producing huge TSVs for large benchmarks.
+    if (rows * cols > 10000) {
+        cerr << "Skipping TSV write for large matrix (" << rows << "x" << cols << ") -> " << filename << '\n';
+        return;
+    }
+
     std::ofstream out(filename);
     if (!out) {
         cerr << "write_output_tsv: failed to open " << filename << '\n';
@@ -162,21 +168,21 @@ static void runVisibleExample()
     for (auto b : parCalc.resultVector()) cout << (b ? "1" : "0") << ' ';
     cout << '\n';
 
-    // write TSV outputs
+    // write TSV outputs (safe: function skips large matrices)
     write_output_tsv(seqCalc, weight, gain, "output_sequential.tsv");
     write_output_tsv(parCalc, weight, gain, "output_parallel.tsv");
-    cout << "Wrote output_sequential.tsv and output_parallel.tsv\n\n";
+    cout << "Wrote output_sequential.tsv and output_parallel.tsv (if small enough)\n\n";
 }
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-    // First show a visible small example for easy inspection
+    // Keep a small visible example for inspection
     runVisibleExample();
 
-    // Large randomized input parameters (tune these)
-    const int nItems = 2000;      // number of items (increase for more work)
-    const int capacity = 2000;    // capacity (increase for more work)
-    const int iterations = 5;     // benchmark runs (lower when problem is large)
+    // Larger problem where parallelism has a chance to pay off:
+    const int nItems = 5000;      // requested larger input
+    const int capacity = 5000;    // requested larger input
+    const int iterations = 3;     // keep low for large runs
     const int warmups = 1;
 
     cout << "Problem: items=" << nItems << " capacity=" << capacity
@@ -231,7 +237,7 @@ int _tmain(int argc, _TCHAR* argv[])
             cout << "Verification passed: results match within eps=" << eps << "\n";
         }
 
-        // Only write TSV if the matrix is small enough (saves time/disk space)
+        // Skip TSV for large matrices (write_output_tsv enforces)
         write_output_tsv(*seqCalc, weight, profit, "output_sequential_random.tsv");
         write_output_tsv(*parCalc, weight, profit, "output_parallel_random.tsv");
     }

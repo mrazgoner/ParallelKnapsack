@@ -81,12 +81,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AntiDiagonalParallelKnapsackCalculator.h" />
     <ClInclude Include="DynamicKnapsackCalculator.h" />
     <ClInclude Include="ParallelKnapsackCalculator.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AntiDiagonalParallelKnapsackCalculator.cpp" />
     <ClCompile Include="DynamicKnapsackCalculator.cpp" />
     <ClCompile Include="ParallelKnapsack.cpp" />
     <ClCompile Include="ParallelKnapsackCalculator.cpp" />
