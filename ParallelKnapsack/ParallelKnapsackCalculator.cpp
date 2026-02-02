@@ -1,5 +1,6 @@
 #include "ParallelKnapsackCalculator.h"
 
+
 void ParallelKnapsackCalculator::traverse(const std::function<void(int, int)>& worker)
 {
 	#pragma omp parallel

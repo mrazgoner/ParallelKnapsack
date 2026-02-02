@@ -1,6 +1,6 @@
 
 #pragma once
-
+#include <memory>
 #include <vector>
 #include <functional>
 
@@ -15,22 +15,11 @@ public:
     int cols() const noexcept;
     int itemCount() const noexcept;
     int maxCapacity() const noexcept;
-    double maxValue() const noexcept;
 
     const std::vector<double>& profitMatrix() const noexcept;
     const std::vector<bool>& resultVector() const noexcept;
+    double maxValue() const noexcept;
 
-    virtual void traverse(const std::function<void(int, int)>& worker);
-
-protected:
-    virtual void processCell(int item, int capacity);
-    virtual void onPreCompute();
-    virtual void onPostCompute();
-
-private:
-    void initMatrix();
-    void fill_profit_matrix_kernel_default(int item, int capacity);
-    void calculate_result_vector();
 
 protected:
     std::vector<double> m_profitMatrix;
@@ -43,4 +32,14 @@ protected:
     int m_rows;
     int m_cols;
     double m_maxValue;
+
+    virtual void traverse(const std::function<void(int, int)>& worker);
+    virtual void processCell(int item, int capacity);
+    virtual void onPreCompute();
+    virtual void onPostCompute();
+
+private:
+    void initMatrix();
+    void fill_profit_matrix_kernel_default(int item, int capacity);
+    void calculate_result_vector();
 };

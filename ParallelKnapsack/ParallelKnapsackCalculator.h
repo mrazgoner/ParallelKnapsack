@@ -1,5 +1,7 @@
 #pragma once
 #include "DynamicKnapsackCalculator.h"
+
+
 class ParallelKnapsackCalculator :
     public DynamicKnapsackCalculator
 {

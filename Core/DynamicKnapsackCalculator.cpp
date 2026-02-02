@@ -1,6 +1,5 @@
+
 #include "DynamicKnapsackCalculator.h"
-#include <algorithm>
-#include <cassert>
 
 DynamicKnapsackCalculator::DynamicKnapsackCalculator(const std::vector<int>& weight,
                                                        const std::vector<double>& profit,

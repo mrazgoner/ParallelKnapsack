@@ -13,6 +13,7 @@
 #include <iomanip>
 #include "DynamicKnapsackCalculator.h"
 #include "ParallelKnapsackCalculator.h"
+#include "CudaKnapsackCalculator.h"
 
 using namespace std;
 using clk = chrono::high_resolution_clock;
