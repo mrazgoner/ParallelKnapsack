@@ -35,6 +35,9 @@ namespace ParallelKnapsackInterop
         case AlgorithmType::AntiDiagonalParallel:
             m_pCalculator = new AntiDiagonalParallelKnapsackCalculator(*m_pWeights, *m_pProfits, maxCapacity);
             break;
+        case AlgorithmType::Cuda:
+            m_pCalculator = new CudaKnapsackCalculator(*m_pWeights, *m_pProfits, maxCapacity);
+            break;
         default:
             throw gcnew ArgumentException("Unknown algorithm type");
         }

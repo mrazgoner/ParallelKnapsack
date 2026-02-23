@@ -1,12 +1,11 @@
 #pragma once
 
-// Include native C++ headers BEFORE any managed headers
 #include "DynamicKnapsackCalculator.h"
 #include "ParallelKnapsackCalculator.h"
 #include "AntiDiagonalParallelKnapsackCalculator.h"
+#include "../CudaKnapsack/CudaKnapsackCalculator.h"
 #include <vector>
 
-// Now include managed headers
 #using <mscorlib.dll>
 
 using namespace System;
@@ -27,7 +26,8 @@ namespace ParallelKnapsackInterop
         {
             Sequential,
             Parallel,
-            AntiDiagonalParallel
+            AntiDiagonalParallel,
+            Cuda
         };
 
         /// <summary>

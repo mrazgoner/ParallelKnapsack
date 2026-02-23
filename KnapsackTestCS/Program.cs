@@ -31,6 +31,10 @@ namespace KnapsackTestCS
             TestAlgorithm("Anti-Diagonal Parallel", weights, profits, capacity,
                 KnapsackCalculatorWrapper.AlgorithmType.AntiDiagonalParallel);
 
+            // Test CUDA Algorithm
+            TestAlgorithm("CUDA (GPU)", weights, profits, capacity,
+                KnapsackCalculatorWrapper.AlgorithmType.Cuda);
+
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
         }
@@ -40,18 +44,26 @@ namespace KnapsackTestCS
         {
             Console.WriteLine($"--- {name} Algorithm ---");
 
-            using (var calculator = new KnapsackCalculatorWrapper(weights, profits, capacity, algorithm))
+            try
             {
-                // Measure execution time
-                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-                calculator.Compute();
-                stopwatch.Stop();
+                using (var calculator = new KnapsackCalculatorWrapper(weights, profits, capacity, algorithm))
+                {
+                    // Measure execution time
+                    var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+                    calculator.Compute();
+                    stopwatch.Stop();
 
-                // Display results
-                Console.WriteLine($"Max Value: {calculator.GetMaxValue()}");
-                Console.WriteLine($"Items Included: [{string.Join(", ", calculator.GetResultVector())}]");
-                Console.WriteLine($"Matrix Size: {calculator.GetRows()} x {calculator.GetCols()}");
-                Console.WriteLine($"Execution Time: {stopwatch.ElapsedMilliseconds} ms\n");
+                    // Display results
+                    Console.WriteLine($"Max Value: {calculator.GetMaxValue()}");
+                    Console.WriteLine($"Items Included: [{string.Join(", ", calculator.GetResultVector())}]");
+                    Console.WriteLine($"Matrix Size: {calculator.GetRows()} x {calculator.GetCols()}");
+                    Console.WriteLine($"Execution Time: {stopwatch.ElapsedMilliseconds} ms\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"⚠️  Skipped: {ex.Message}");
+                Console.WriteLine($"   (This is expected if CUDA Toolkit is not installed or no NVIDIA GPU is available)\n");
             }
         }
     }
