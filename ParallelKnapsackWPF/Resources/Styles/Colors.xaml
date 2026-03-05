@@ -1,0 +1,35 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- Primary Colors -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#2196F3"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#1976D2"/>
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="#BBDEFB"/>
+    
+    <!-- Accent Colors -->
+    <SolidColorBrush x:Key="AccentBrush" Color="#FF4081"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#4CAF50"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#FF9800"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#F44336"/>
+    
+    <!-- Grayscale -->
+    <SolidColorBrush x:Key="Gray50" Color="#FAFAFA"/>
+    <SolidColorBrush x:Key="Gray100" Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="Gray200" Color="#EEEEEE"/>
+    <SolidColorBrush x:Key="Gray300" Color="#E0E0E0"/>
+    <SolidColorBrush x:Key="Gray400" Color="#BDBDBD"/>
+    <SolidColorBrush x:Key="Gray500" Color="#9E9E9E"/>
+    <SolidColorBrush x:Key="Gray600" Color="#757575"/>
+    <SolidColorBrush x:Key="Gray700" Color="#616161"/>
+    <SolidColorBrush x:Key="Gray800" Color="#424242"/>
+    <SolidColorBrush x:Key="Gray900" Color="#212121"/>
+    
+    <!-- Background Colors -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="White"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="White"/>
+    
+    <!-- Text Colors -->
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#212121"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#757575"/>
+    
+</ResourceDictionary>

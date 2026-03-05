@@ -16,12 +16,14 @@ namespace ParallelKnapsackInterop
 
         for (int i = 0; i < weights->Length; i++)
         {
-            m_pWeights->push_back(static_cast<int>(weights[i]));
+            int w = weights[i];
+            m_pWeights->push_back(w);
         }
 
         for (int i = 0; i < profits->Length; i++)
         {
-            m_pProfits->push_back(static_cast<double>(profits[i]));
+            double p = profits[i];
+            m_pProfits->push_back(p);
         }
 
         switch (algorithm)
@@ -108,9 +110,9 @@ namespace ParallelKnapsackInterop
             return nullptr;
 
         const std::vector<double>& profitMatrix = m_pCalculator->profitMatrix();
-        array<double>^ result = gcnew array<double>(profitMatrix.size());
+        array<double>^ result = gcnew array<double>(static_cast<int>(profitMatrix.size()));
 
-        for (size_t i = 0; i < profitMatrix.size(); i++)
+        for (int i = 0; i < static_cast<int>(profitMatrix.size()); i++)
         {
             result[i] = profitMatrix[i];
         }
@@ -124,9 +126,9 @@ namespace ParallelKnapsackInterop
             return nullptr;
 
         const std::vector<bool>& resultVector = m_pCalculator->resultVector();
-        array<bool>^ result = gcnew array<bool>(resultVector.size());
+        array<bool>^ result = gcnew array<bool>(static_cast<int>(resultVector.size()));
 
-        for (size_t i = 0; i < resultVector.size(); i++)
+        for (int i = 0; i < static_cast<int>(resultVector.size()); i++)
         {
             result[i] = resultVector[i];
         }

@@ -2,7 +2,7 @@
 
 #include "DynamicKnapsackCalculator.h"
 #include <functional>
-
+//new CudaKnapsackCalculator(*m_pWeights, *m_pProfits, maxCapacity);
 class CudaKnapsackCalculator : public DynamicKnapsackCalculator
 {
 public:
