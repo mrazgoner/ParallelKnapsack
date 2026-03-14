@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ParallelKnapsackWPF.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ParallelKnapsackWPF.Models;
 using ParallelKnapsackWPF.Services;
 
@@ -28,14 +29,14 @@ namespace ParallelKnapsackWPF.ViewModels
             _interopService = interopService;
             Items = new ObservableCollection<KnapsackItem>();
 
-            AddItemCommand = new RelayCommand(_ => AddItem());
-            RemoveItemCommand = new RelayCommand(
-                item => RemoveItem((KnapsackItem)item),
+            AddItemCommand = new RelayCommand(AddItem);
+            RemoveItemCommand = new RelayCommand<KnapsackItem>(
+                item => RemoveItem(item),
                 item => item != null);
             ComputeCommand = new AsyncRelayCommand(
-                async () => await ComputeAsync(),
+                ComputeAsync,
                 () => Items.Count > 0 && Capacity > 0 && !IsBusy);
-            ClearCommand = new RelayCommand(_ => Clear());
+            ClearCommand = new RelayCommand(Clear);
 
             // Add some sample items
             AddSampleItems();

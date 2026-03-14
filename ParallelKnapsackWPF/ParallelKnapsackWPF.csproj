@@ -17,4 +17,8 @@
     <ProjectReference Include="..\ParallelKnapsackInterop\ParallelKnapsackInterop.vcxproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
 </Project>

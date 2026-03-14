@@ -1,4 +1,4 @@
-using ParallelKnapsackWPF.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ParallelKnapsackWPF.Models
 {
